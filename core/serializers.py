@@ -5,7 +5,9 @@ from core.models import (
     AirplaneType,
     Airplane,
     Airport,
-    Route
+    Route,
+    Order,
+    Ticket
 )
 
 
@@ -65,3 +67,37 @@ class RouteListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Route
         fields = ("id", "source", "destination", "distance")
+
+
+class TicketSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Ticket
+        fields = ("id", "row", "seat", "flight")
+
+
+class OrderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order
+        fields = ("id", "created_at", "user")
+
+
+class OrderListSerializer(OrderSerializer):
+    user = serializers.SlugRelatedField(
+        many=False, read_only=True, slug_field="email"
+    )
+    num_of_tickets = serializers.IntegerField(source="tickets.count", read_only=True)
+
+    class Meta:
+        model = Order
+        fields = ("id", "created_at", "user", "num_of_tickets")
+
+
+class OrderRetrieveSerializer(serializers.ModelSerializer):
+    user = serializers.SlugRelatedField(
+        many=False, read_only=True, slug_field="email"
+    )
+    tickets = TicketSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Order
+        fields = ("id", "created_at", "user", "tickets")
