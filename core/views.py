@@ -1,50 +1,30 @@
-from rest_framework import mixins
-from rest_framework.viewsets import GenericViewSet
+from rest_framework.viewsets import ModelViewSet
 
 from core.models import (
     Crew,
     AirplaneType,
-    Airplane
+    Airplane, Airport
 )
 from core.serializers import (
     CrewSerializer,
     AirplaneTypeSerializer,
-    AirplaneSerializer, AirplaneListSerializer
+    AirplaneSerializer,
+    AirplaneListSerializer,
+    AirportSerializer
 )
 
 
-class CrewViewSet(
-    mixins.CreateModelMixin,
-    mixins.ListModelMixin,
-    mixins.RetrieveModelMixin,
-    mixins.UpdateModelMixin,
-    mixins.DestroyModelMixin,
-    GenericViewSet,
-):
+class CrewViewSet(ModelViewSet):
     queryset = Crew.objects.all()
     serializer_class = CrewSerializer
 
 
-class AirplaneTypeViewSet(
-    mixins.CreateModelMixin,
-    mixins.ListModelMixin,
-    mixins.RetrieveModelMixin,
-    mixins.UpdateModelMixin,
-    mixins.DestroyModelMixin,
-    GenericViewSet,
-):
+class AirplaneTypeViewSet(ModelViewSet):
     queryset = AirplaneType.objects.all()
     serializer_class = AirplaneTypeSerializer
 
 
-class AirplaneViewSet(
-    mixins.CreateModelMixin,
-    mixins.ListModelMixin,
-    mixins.RetrieveModelMixin,
-    mixins.UpdateModelMixin,
-    mixins.DestroyModelMixin,
-    GenericViewSet,
-):
+class AirplaneViewSet(ModelViewSet):
     queryset = Airplane.objects.prefetch_related("airplane_type")
     serializer_class = AirplaneSerializer
 
@@ -64,3 +44,6 @@ class AirplaneViewSet(
         return AirplaneSerializer
 
 
+class AirportViewSet(ModelViewSet):
+    queryset = Airport.objects.all()
+    serializer_class = AirportSerializer
