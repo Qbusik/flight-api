@@ -22,13 +22,19 @@ from core.serializers import (
     OrderRetrieveSerializer,
     FlightSerializer,
     FlightListSerializer,
-    FlightRetrieveSerializer
+    FlightRetrieveSerializer,
+    CrewRetrieveSerializer
 )
 
 
 class CrewViewSet(ModelViewSet):
     queryset = Crew.objects.all()
     serializer_class = CrewSerializer
+
+    def get_serializer_class(self):
+        if self.action == "retrieve":
+            return CrewRetrieveSerializer
+        return CrewSerializer
 
 
 class AirplaneTypeViewSet(ModelViewSet):

@@ -184,3 +184,17 @@ class OrderRetrieveSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = ("id", "created_at", "user", "tickets")
+
+
+class FlightInCrewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Flight
+        fields = ("id", "route", "airplane", "departure_time", "arrival_time")
+
+
+class CrewRetrieveSerializer(serializers.ModelSerializer):
+    flights = FlightInCrewSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Crew
+        fields = ("id", "first_name", "last_name", "flights")
