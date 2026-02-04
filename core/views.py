@@ -1,6 +1,8 @@
 from datetime import datetime
 
 from django.db.models import F, Count, Prefetch
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema, OpenApiParameter
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
@@ -157,3 +159,28 @@ class FlightViewSet(ModelViewSet):
             queryset = queryset.filter(route__source__name=source)
 
         return queryset
+
+    @extend_schema(
+        parameters=[
+            OpenApiParameter(
+                "source",
+                type=OpenApiTypes.STR,
+                description="Filter by source name (ex. ?source=WAW)",
+            ),
+            OpenApiParameter(
+                "destination",
+                type=OpenApiTypes.STR,
+                description="Filter by destination name (ex. ?destination=KRK)",
+            ),
+            OpenApiParameter(
+                "date",
+                type=OpenApiTypes.DATE,
+                description=(
+                        "Filter by date of departure "
+                        "(ex. ?date=2022-10-23)"
+                ),
+            ),
+        ]
+    )
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
