@@ -6,7 +6,7 @@ from core.models import (
     Airplane,
     Airport,
     Route,
-    Order
+    Order, Flight
 )
 from core.serializers import (
     CrewSerializer,
@@ -18,7 +18,7 @@ from core.serializers import (
     RouteListSerializer,
     OrderSerializer,
     OrderListSerializer,
-    OrderRetrieveSerializer
+    OrderRetrieveSerializer, FlightSerializer, FlightListSerializer
 )
 
 
@@ -73,3 +73,17 @@ class OrderViewSet(ModelViewSet):
 
     def get_queryset(self):
         return Order.objects.prefetch_related("user", "tickets").filter(user=self.request.user)
+
+
+class FlightViewSet(ModelViewSet):
+    queryset = Flight.objects.select_related(
+        "route", "airplane", "route__source", "route__destination",
+    ).prefetch_related(
+        "crew",
+    )
+    serializer_class = FlightSerializer
+
+    def get_serializer_class(self):
+        if self.action == "list":
+            return FlightListSerializer
+        return FlightSerializer
