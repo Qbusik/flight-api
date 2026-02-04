@@ -74,8 +74,7 @@ class Route(models.Model):
             raise ValidationError("Source and destination must be different")
 
     def __str__(self):
-        return (f"Route: {self.source.name} -> {self.destination.name} "
-                f"({self.distance})")
+        return f"Route: #{self.pk} (Distance: {self.distance})"
 
 
 class Order(models.Model):
