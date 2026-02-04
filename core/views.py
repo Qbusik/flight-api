@@ -1,4 +1,5 @@
 from django.db.models import F, Count, Prefetch
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
@@ -76,9 +77,15 @@ class RouteViewSet(ModelViewSet):
         return RouteSerializer
 
 
+class OrderPagination(PageNumberPagination):
+    page_size = 10
+    max_page_size = 100
+
+
 class OrderViewSet(ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
+    pagination_class = OrderPagination
     permission_classes = (IsAuthenticated,)
 
     def get_serializer_class(self):
