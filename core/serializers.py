@@ -117,6 +117,10 @@ class TicketSerializer(serializers.ModelSerializer):
         fields = ("id", "row", "seat", "flight")
 
 
+class TicketWithFlightExposedSerializer(TicketSerializer):
+    flight = FlightListSerializer(read_only=True)
+
+
 class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
@@ -140,7 +144,7 @@ class OrderRetrieveSerializer(serializers.ModelSerializer):
     user = serializers.SlugRelatedField(
         many=False, read_only=True, slug_field="email"
     )
-    tickets = TicketSerializer(
+    tickets = TicketWithFlightExposedSerializer(
         many=True, read_only=True
     )
 

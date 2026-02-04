@@ -1,4 +1,4 @@
-from django.db.models import F, Count
+from django.db.models import F, Count, Prefetch
 from rest_framework.viewsets import ModelViewSet
 
 from core.models import (
@@ -7,7 +7,7 @@ from core.models import (
     Airplane,
     Airport,
     Route,
-    Order, Flight
+    Order, Flight, Ticket
 )
 from core.serializers import (
     CrewSerializer,
@@ -73,7 +73,23 @@ class OrderViewSet(ModelViewSet):
         return OrderSerializer
 
     def get_queryset(self):
-        return Order.objects.prefetch_related("user", "tickets").filter(user=self.request.user)
+        return (
+            Order.objects
+            .select_related("user")
+            .prefetch_related(
+                Prefetch(
+                    "tickets",
+                    queryset=Ticket.objects.select_related(
+                        "flight",
+                        "flight__route",
+                        "flight__route__source",
+                        "flight__route__destination",
+                        "flight__airplane",
+                    )
+                )
+            )
+            .filter(user=self.request.user)
+        )
 
 
 class FlightViewSet(ModelViewSet):
