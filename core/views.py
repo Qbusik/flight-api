@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.db.models import F, Count, Prefetch
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
@@ -136,3 +138,22 @@ class FlightViewSet(ModelViewSet):
         if self.action == "retrieve":
             return FlightRetrieveSerializer
         return FlightSerializer
+
+    def get_queryset(self):
+        queryset = self.queryset
+
+        source = self.request.query_params.get("source", None)
+        destination = self.request.query_params.get("destination", None)
+        date = self.request.query_params.get("date", None)
+
+        if date:
+            date = datetime.strptime(date, "%Y-%m-%d").date()
+            queryset = queryset.filter(departure_time__date=date)
+
+        if destination:
+            queryset = queryset.filter(route__destination__name=destination)
+
+        if source:
+            queryset = queryset.filter(route__source__name=source)
+
+        return queryset
