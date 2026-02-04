@@ -1,4 +1,6 @@
+from django.db import transaction
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 
 from core.models import (
     Crew,
@@ -111,6 +113,26 @@ class FlightRetrieveSerializer(FlightListSerializer):
         fields = ("id", "route", "airplane", "departure_time", "arrival_time", "crew")
 
 
+class TicketCreateSerializer(serializers.ModelSerializer):
+    flight = serializers.PrimaryKeyRelatedField(
+        queryset=Flight.objects.all()
+    )
+
+    def validate(self, attrs):
+        data = super(TicketCreateSerializer, self).validate(attrs=attrs)
+        Ticket.validate_ticket(
+            attrs["row"],
+            attrs["seat"],
+            attrs["flight"].airplane,
+            ValidationError
+        )
+        return data
+
+    class Meta:
+        model = Ticket
+        fields = ("id", "row", "seat", "flight")
+
+
 class TicketSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ticket
@@ -122,9 +144,20 @@ class TicketWithFlightExposedSerializer(TicketSerializer):
 
 
 class OrderSerializer(serializers.ModelSerializer):
+    tickets = TicketCreateSerializer(many=True, read_only=False, allow_empty=False)
+
     class Meta:
         model = Order
-        fields = ("id", "created_at", "user")
+        fields = ("id", "created_at", "tickets")
+
+    def create(self, validated_data):
+        with transaction.atomic():
+            tickets_data = validated_data.pop("tickets")
+            user = self.context['request'].user
+            order = Order.objects.create(user=user, **validated_data)
+            for ticket_data in tickets_data:
+                Ticket.objects.create(order=order, **ticket_data)
+            return order
 
 
 class OrderListSerializer(OrderSerializer):

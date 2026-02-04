@@ -19,7 +19,10 @@ from core.serializers import (
     RouteListSerializer,
     OrderSerializer,
     OrderListSerializer,
-    OrderRetrieveSerializer, FlightSerializer, FlightListSerializer, FlightRetrieveSerializer
+    OrderRetrieveSerializer,
+    FlightSerializer,
+    FlightListSerializer,
+    FlightRetrieveSerializer
 )
 
 
