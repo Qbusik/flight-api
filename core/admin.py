@@ -19,5 +19,3 @@ admin.site.register(Route)
 admin.site.register(Order)
 admin.site.register(Flight)
 admin.site.register(Ticket)
-
-
