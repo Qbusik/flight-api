@@ -18,7 +18,7 @@ from core.serializers import (
     RouteListSerializer,
     OrderSerializer,
     OrderListSerializer,
-    OrderRetrieveSerializer, FlightSerializer, FlightListSerializer
+    OrderRetrieveSerializer, FlightSerializer, FlightListSerializer, FlightRetrieveSerializer
 )
 
 
@@ -86,4 +86,6 @@ class FlightViewSet(ModelViewSet):
     def get_serializer_class(self):
         if self.action == "list":
             return FlightListSerializer
+        if self.action == "retrieve":
+            return FlightRetrieveSerializer
         return FlightSerializer

@@ -7,7 +7,8 @@ from core.models import (
     Airport,
     Route,
     Order,
-    Ticket, Flight
+    Ticket,
+    Flight
 )
 
 
@@ -15,6 +16,14 @@ class CrewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Crew
         fields = ("id", "first_name", "last_name")
+
+
+class CrewShortSerializer(serializers.ModelSerializer):
+    full_name = serializers.ReadOnlyField()
+
+    class Meta:
+        model = Crew
+        fields = ("id", "full_name")
 
 
 class AirplaneTypeSerializer(serializers.ModelSerializer):
@@ -79,11 +88,22 @@ class FlightSerializer(serializers.ModelSerializer):
 
 
 class FlightListSerializer(serializers.ModelSerializer):
-    route = RouteListSerializer(many=False, read_only=True)
+    route = RouteListSerializer(
+        many=False, read_only=True
+    )
     airplane = serializers.SlugRelatedField(
         many=False, read_only=True, slug_field="name"
     )
-    crew = CrewSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Flight
+        fields = ("id", "route", "airplane", "departure_time", "arrival_time")
+
+
+class FlightRetrieveSerializer(FlightListSerializer):
+    crew = CrewShortSerializer(
+        many=True, read_only=True
+    )
 
     class Meta:
         model = Flight
@@ -106,7 +126,9 @@ class OrderListSerializer(OrderSerializer):
     user = serializers.SlugRelatedField(
         many=False, read_only=True, slug_field="email"
     )
-    num_of_tickets = serializers.IntegerField(source="tickets.count", read_only=True)
+    num_of_tickets = serializers.IntegerField(
+        source="tickets.count", read_only=True
+    )
 
     class Meta:
         model = Order
@@ -117,7 +139,9 @@ class OrderRetrieveSerializer(serializers.ModelSerializer):
     user = serializers.SlugRelatedField(
         many=False, read_only=True, slug_field="email"
     )
-    tickets = TicketSerializer(many=True, read_only=True)
+    tickets = TicketSerializer(
+        many=True, read_only=True
+    )
 
     class Meta:
         model = Order
