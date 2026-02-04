@@ -70,6 +70,13 @@ class FlightSerializer(serializers.ModelSerializer):
         model = Flight
         fields = ("id", "route", "airplane", "departure_time", "arrival_time", "crew")
 
+    def validate(self, attrs):
+        if attrs["arrival_time"] <= attrs["departure_time"]:
+            raise serializers.ValidationError(
+                "Arrival time cannot be earlier than departure time"
+            )
+        return attrs
+
 
 class FlightListSerializer(serializers.ModelSerializer):
     route = RouteListSerializer(many=False, read_only=True)
