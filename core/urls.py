@@ -14,12 +14,12 @@ from core.views import (
 app_name = "core"
 
 router = routers.DefaultRouter()
-router.register("crew", CrewViewSet)
-router.register("airplane_types", AirplaneTypeViewSet)
-router.register("airplanes", AirplaneViewSet)
-router.register("airports", AirportViewSet)
-router.register("routes", RouteViewSet)
-router.register("orders", OrderViewSet)
-router.register("flights", FlightViewSet)
+router.register("crew", CrewViewSet, basename="crew")
+router.register("airplane_types", AirplaneTypeViewSet, basename="airplane_types")
+router.register("airplanes", AirplaneViewSet, basename="airplanes")
+router.register("airports", AirportViewSet, basename="airports")
+router.register("routes", RouteViewSet, basename="routes")
+router.register("orders", OrderViewSet, basename="orders")
+router.register("flights", FlightViewSet, basename="flights")
 
 urlpatterns = [path("", include(router.urls))]
