@@ -3,11 +3,12 @@
 A comprehensive flight management system developed using Django REST Framework, enabling efficient management of airports, aircraft and their types, crew, routes, flights, and the entire ticket booking workflow.
 
 ## 📃 Features
-- **Flight Management** – Manage airports, aircraft and their types, crew members, routes, and flights.
-- **Reservation System** – Seat selection for specific flights with real-time availability validation across different aircraft types.
-- **JWT Authentication** – Secure user registration and authentication using JSON Web Tokens.
-- **API Documentation** – Automatically generated and interactive API documentation via Swagger and ReDoc.
-- **Containerization** – Full support for Docker and Docker Compose for easy setup and deployment.
+- **Admin Panel** – located at /admin/
+- **Flight Management** – Manage airports, aircraft and their types, crew members, routes, and flights
+- **Reservation System** – Seat selection for specific flights with real-time availability validation
+- **JWT Authentication** – Secure user registration and authentication using JSON Web Tokens
+- **API Documentation** – Automatically generated and interactive API documentation via Swagger and ReDoc
+- **Containerization** – Full support for Docker and Docker Compose for easy setup and deployment
 
 ---
 
@@ -25,7 +26,7 @@ To run this project, you will need either:
 
 ---
 
-## 🚀 Getting Started with DOCKER
+## 🚀 Run with DOCKER
 
 This is the fastest method to get the project running with a pre-configured database in an isolated environment.
 
@@ -37,12 +38,12 @@ This is the fastest method to get the project running with a pre-configured data
 2.  **Configure Environment Variables:**
     Create a `.env` file in the root directory:
     ```
-    SECRET_KEY="your_private_secret_key"
+    SECRET_KEY=<your secret key>
+    POSTGRES_DB=<your database name>
+    POSTGRES_USER=<your user name>
+    POSTGRES_PASSWORD=<your password>
+    DB_HOST=<your db name>
     DEBUG=True
-    POSTGRES_DB=database
-    POSTGRES_USER=user
-    POSTGRES_PASSWORD=password
-    DB_HOST=db
     DB_PORT=5432
     ```
 
