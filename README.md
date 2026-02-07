@@ -51,9 +51,15 @@ This is the fastest method to get the project running with a pre-configured data
     ```
     make up
     ```
+    **OR**, if you don’t have Make/Chocolatey installed:
+    ```
+    docker-compose up --build
+    ```
     The application will be available at: `http://localhost:8000/`
 
+
 4.  **Initialize Application:**
+
     Run these procedures to set up the database:
     ```
     # 1. Load sample data (fixtures)
@@ -62,6 +68,15 @@ This is the fastest method to get the project running with a pre-configured data
     # 2. Create an admin account
     make superuser
     ```
+    **OR**, if you don’t have Make/Chocolatey installed:
+    ```
+    # 1. Load sample data (fixtures)
+    docker exec -it flight_app python manage.py loaddata sample_data.json
+
+    # 2. Create an admin account
+    docker exec -it flight_app python manage.py createsuperuser
+    ```
+    
 ---
 
 ## 📖 API Documentation
