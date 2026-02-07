@@ -49,7 +49,7 @@ This is the fastest method to get the project running with a pre-configured data
 
 3.  **Build and Run Containers:**
     ```
-    docker-compose up --build
+    make up
     ```
     The application will be available at: `http://localhost:8000/`
 
@@ -57,10 +57,10 @@ This is the fastest method to get the project running with a pre-configured data
     Run these procedures to set up the database:
     ```
     # 1. Load sample data (fixtures)
-    docker exec -it flight_app python manage.py loaddata sample_data.json
+    make load
 
     # 2. Create an admin account
-    docker exec -it flight_app python manage.py createsuperuser
+    make superuser
     ```
 ---
 
