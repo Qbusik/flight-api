@@ -1,10 +1,13 @@
 from django.contrib import admin
 from django.urls import path, include
+
 from drf_spectacular.views import (
     SpectacularAPIView,
     SpectacularSwaggerView,
     SpectacularRedocView
 )
+
+from flight_api import settings
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -17,5 +20,10 @@ urlpatterns = [
     path("api/doc/redoc/", SpectacularRedocView.as_view(
         url_name="schema"), name="redoc"
          ),
-    path("__debug__/", include("debug_toolbar.urls")),
 ]
+
+if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns += [
+        path("__debug__/", include(debug_toolbar.urls)),
+    ]
